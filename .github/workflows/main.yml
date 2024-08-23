@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.9.0
@@ -19,8 +19,13 @@ jobs:
         ssh-private-key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
 
     - name: Copy files via SCP
-      run: |
-        scp -r -o StrictHostKeyChecking=no -p ./* ubuntu@54.145.181.50:/var/www/crab.codes
+      uses: appleboy/scp-action@v0.1.1
+      with:
+        host: 54.145.181.50
+        username: ubuntu
+        key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        source: "./*"
+        target: "/var/www/crab.codes"
 
     - name: Restart server or perform any other commands
       run: |
