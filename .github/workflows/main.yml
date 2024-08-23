@@ -1,0 +1,27 @@
+name: Deploy to Lightsail
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+
+    - name: Copy files via SCP
+      run: |
+        scp -r -o StrictHostKeyChecking=no ./* ubuntu@54.145.181.50:/var/www/crab.codes
+
+    - name: Restart server or perform any other commands
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@54.145.181.50 'sudo systemctl restart nginx'
