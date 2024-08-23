@@ -20,7 +20,7 @@ jobs:
 
     - name: Copy files via SCP
       run: |
-        scp -r -o StrictHostKeyChecking=no ./* ubuntu@54.145.181.50:/var/www/crab.codes
+        scp -r -o StrictHostKeyChecking=no -p ./* ubuntu@54.145.181.50:/var/www/crab.codes
 
     - name: Restart server or perform any other commands
       run: |
